@@ -1,65 +1,89 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+
+import AppLayout from '../components/AppLayout'
+import BUtton from '../components/BUtton'
+import GitHubLogo from '../components/Icons/GitHub'
+
+import { colors } from '../styles/theme'
+
+import { loginWithGithub, onAuthStateChanged } from '../firebase/client'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
+
+  const [ user, setUser ] = useState( null )
+
+  useEffect( () => {
+    onAuthStateChanged( setUser )
+
+  })
+
+  const handleClick = () => {
+    loginWithGithub()
+      .then( user => {
+         const { avatar, username, url } = user
+         setUSer ( user )
+      })
+      .catch( err => console.log( err ) )
+
+  }
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <>
+        <Head>
+          <title>Bandter - Garage Band Expiernce</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <AppLayout>
+          <section>
+            <img src='/logo.png'/>
+            <h1>BandTer</h1>
+            <h2>Garage Band Experiences 🎧</h2>
+            <div>
+              {
+                  user === null  &&
+                     <BUtton onClick={ handleClick }>
+                        <GitHubLogo fill='#fff' width={ 24 } height={ 24 }/>
+                        Log In with GItHub
+                      </BUtton>
+              }
+              {
+                user && user.avatar &&
+                  <div>
+                          <img src={ user.avatar } />
+                          <strong>{ user.username }</strong>
+                  </div>
+              }
+            </div>
+          </section>
+        </AppLayout>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+        <style jsx>{`
+          img {
+            width: 120px
+          }
+          div {
+            margin-top: 16px;
+          }
+          section {
+            display: grid;
+            height: 100%;
+            place-content:center;
+            place-items: center;
+          }
+          h1 {
+            color: ${ colors.primary };
+            font-weight: 800;
+            margin-bottom: 16px;
+          }
+          h2 {
+            font-size: 16px;
+            color: ${ colors.secondary };
+            margin: 0
+          }
+        
+        `}</style>
+      </>
   )
 }
