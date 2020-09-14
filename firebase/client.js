@@ -52,3 +52,22 @@ export const addBandTit = ({ avatar, content, userId, userName }) => {
     shareCount: 0,
   })
 }
+
+export const fetchLatestBandtits = () => {
+  return db
+    .collection("bandtits")
+    .get()
+    .then(({ docs }) => {
+      return docs.map((doc) => {
+        const data = doc.data()
+        const id = doc.id
+
+        const { createdAt } = data
+        return {
+          ...data,
+          id,
+          createdAt: +createdAt.toDate(),
+        }
+      })
+    })
+}

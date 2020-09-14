@@ -3,10 +3,20 @@ import Button from "components/Button"
 import useUser from "hooks/useUser"
 import { useState } from "react"
 import { addBandTit } from "firebase/client"
+import { useRouter } from "next/router"
+
+const COMPOSE_STATES = {
+  USER_NOT_KNOWN: 0,
+  LOADING: 1,
+  SUCESS: 2,
+  ERROR: -1,
+}
 
 export default function ComposeBandtit() {
   const user = useUser()
+  const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN)
   const [message, setMessage] = useState("")
+  const router = useRouter()
 
   const handleChange = (evt) => {
     const { value } = evt.target
@@ -15,14 +25,21 @@ export default function ComposeBandtit() {
 
   const handleSubmit = (evt) => {
     evt.preventDefault()
-    // user !== undefined &&
+    setStatus(COMPOSE_STATES.LOADING)
     addBandTit({
       avatar: user.avatar,
       content: message,
       userId: user.uid,
       userName: user.username,
     })
+      .then(() => router.push("/home"))
+      .catch((err) => {
+        console.log(err)
+        setStatus(COMPOSE_STATES.ERROR)
+      })
   }
+
+  const isButtonDIsabled = !message.length || status === COMPOSE_STATES.LOADING
 
   return (
     <>
@@ -34,7 +51,7 @@ export default function ComposeBandtit() {
             placeholder="¿Qué está pasando?"
           ></textarea>
           <div>
-            <Button disabled={message.length === 0}>BandTea</Button>
+            <Button disabled={isButtonDIsabled}>BandTea</Button>
           </div>
         </form>
       </AppLayout>
