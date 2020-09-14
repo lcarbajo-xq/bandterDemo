@@ -1,89 +1,76 @@
-import Head from 'next/head'
+import Head from "next/head"
 
-import AppLayout from '../components/AppLayout'
-import BUtton from '../components/BUtton'
-import GitHubLogo from '../components/Icons/GitHub'
+import AppLayout from "components/AppLayout"
+import BUtton from "components/BUtton"
+import GitHubLogo from "components/Icons/GitHub"
 
-import { colors } from '../styles/theme'
+import { colors } from "styles/theme"
 
-import { loginWithGithub, onAuthStateChanged } from '../firebase/client'
-import { useEffect, useState } from 'react'
+import { loginWithGithub } from "firebase/client"
+import { useEffect } from "react"
+import { useRouter } from "next/router"
+import useUser, { USER_STATES } from "hooks/useUser"
 
 export default function Home() {
+  const user = useUser()
+  const router = useRouter()
 
-  const [ user, setUser ] = useState( null )
-
-  useEffect( () => {
-    onAuthStateChanged( setUser )
-
-  })
+  useEffect(() => {
+    user && router.replace("/home")
+  }, [user])
 
   const handleClick = () => {
-    loginWithGithub()
-      .then( user => {
-         const { avatar, username, url } = user
-         setUSer ( user )
-      })
-      .catch( err => console.log( err ) )
-
+    loginWithGithub().catch((err) => console.log(err))
   }
 
   return (
-      <>
-        <Head>
-          <title>Bandter - Garage Band Expiernce</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+    <>
+      <Head>
+        <title>Bandter - Garage Band Expiernce</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-        <AppLayout>
-          <section>
-            <img src='/logo.png'/>
-            <h1>BandTer</h1>
-            <h2>Garage Band Experiences 🎧</h2>
-            <div>
-              {
-                  user === null  &&
-                     <BUtton onClick={ handleClick }>
-                        <GitHubLogo fill='#fff' width={ 24 } height={ 24 }/>
-                        Log In with GItHub
-                      </BUtton>
-              }
-              {
-                user && user.avatar &&
-                  <div>
-                          <img src={ user.avatar } />
-                          <strong>{ user.username }</strong>
-                  </div>
-              }
-            </div>
-          </section>
-        </AppLayout>
+      <AppLayout>
+        <section>
+          <img src="/logo.png" />
+          <h1>BandTer</h1>
+          <h2>Garage Band Experiences 🎧</h2>
+          <div>
+            {user === USER_STATES.NOT_LOGGED && (
+              <BUtton onClick={handleClick}>
+                <GitHubLogo fill="#fff" width={24} height={24} />
+                Log In with GItHub
+              </BUtton>
+            )}
+            {user === USER_STATES.NOT_KNOWN && <img src="/spinner.gif" />}
+          </div>
+        </section>
+      </AppLayout>
 
-        <style jsx>{`
-          img {
-            width: 120px
-          }
-          div {
-            margin-top: 16px;
-          }
-          section {
-            display: grid;
-            height: 100%;
-            place-content:center;
-            place-items: center;
-          }
-          h1 {
-            color: ${ colors.primary };
-            font-weight: 800;
-            margin-bottom: 16px;
-          }
-          h2 {
-            font-size: 16px;
-            color: ${ colors.secondary };
-            margin: 0
-          }
-        
-        `}</style>
-      </>
+      <style jsx>{`
+        img {
+          width: 120px;
+        }
+        div {
+          margin-top: 16px;
+        }
+        section {
+          display: grid;
+          height: 100%;
+          place-content: center;
+          place-items: center;
+        }
+        h1 {
+          color: ${colors.primary};
+          font-weight: 800;
+          margin-bottom: 16px;
+        }
+        h2 {
+          font-size: 16px;
+          color: ${colors.secondary};
+          margin: 0;
+        }
+      `}</style>
+    </>
   )
 }
