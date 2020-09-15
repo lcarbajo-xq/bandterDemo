@@ -1,7 +1,14 @@
 import Avatar from "components/Avatar"
 import useTImeAgo from "hooks/useTimeAgo"
 
-export default function BandTit({ id, userName, content, avatar, createdAt }) {
+export default function BandTit({
+  id,
+  userName,
+  img,
+  content,
+  avatar,
+  createdAt,
+}) {
   const timeAgo = useTImeAgo(createdAt)
 
   return (
@@ -17,6 +24,7 @@ export default function BandTit({ id, userName, content, avatar, createdAt }) {
             <date>{timeAgo}</date>
           </header>
           <p>{content}</p>
+          {img && <img src={img} />}
         </section>
       </article>
       <style jsx>{`
@@ -25,12 +33,21 @@ export default function BandTit({ id, userName, content, avatar, createdAt }) {
           display: flex;
           padding: 10px 15px;
         }
+        img {
+          width: 100%;
+          height: auto;
+          border-radius: 10px;
+          margin-top: 10px;
+        }
         div {
           padding-right: 10px;
         }
         p {
           line-height: 1.3125;
           margin: 0;
+        }
+        span {
+          margin: 0 5px;
         }
         date {
           color: #555;

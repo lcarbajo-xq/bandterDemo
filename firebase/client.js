@@ -41,10 +41,11 @@ export const loginWithGithub = () => {
     .catch((err) => console.log(err))
 }
 
-export const addBandTit = ({ avatar, content, userId, userName }) => {
+export const addBandTit = ({ avatar, content, userId, userName, img }) => {
   return db.collection("bandtits").add({
     avatar,
     content,
+    img,
     userId,
     userName,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -56,6 +57,7 @@ export const addBandTit = ({ avatar, content, userId, userName }) => {
 export const fetchLatestBandtits = () => {
   return db
     .collection("bandtits")
+    .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
       return docs.map((doc) => {
@@ -70,4 +72,10 @@ export const fetchLatestBandtits = () => {
         }
       })
     })
+}
+
+export const uploadImage = (file) => {
+  const ref = firebase.storage().ref(`images/${file.name}`)
+  const task = ref.put(file)
+  return task
 }
