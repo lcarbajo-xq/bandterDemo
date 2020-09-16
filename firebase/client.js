@@ -54,23 +54,36 @@ export const addBandTit = ({ avatar, content, userId, userName, img }) => {
   })
 }
 
+export const mapBandtitFromFirebaseToBandtitObkect = (doc) => {
+  const data = doc.data()
+  const id = doc.id
+
+  const { createdAt } = data
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate(),
+  }
+}
+
+export const listenLatestBandtits = (callback) => {
+  return db
+    .collection("bandtits")
+    .orderBy("createdAt", "desc")
+    .limit(25)
+    .onSnapshot(({ docs }) => {
+      const newBandtits = docs.map(mapBandtitFromFirebaseToBandtitObkect)
+      callback(newBandtits)
+    })
+}
+
 export const fetchLatestBandtits = () => {
   return db
     .collection("bandtits")
     .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
-      return docs.map((doc) => {
-        const data = doc.data()
-        const id = doc.id
-
-        const { createdAt } = data
-        return {
-          ...data,
-          id,
-          createdAt: +createdAt.toDate(),
-        }
-      })
+      return docs.map(mapBandtitFromFirebaseToBandtitObkect)
     })
 }
 

@@ -1,7 +1,7 @@
 import BandTit from "components/bandtit"
 import Create from "components/Icons/Create"
 import Search from "components/Icons/Search"
-import { fetchLatestBandtits } from "firebase/client"
+import { listenLatestBandtits } from "firebase/client"
 import useUser from "hooks/useUser"
 import Link from "next/link"
 import Home from "components/Icons/Home"
@@ -14,7 +14,11 @@ export default function HomePage() {
   const user = useUser()
 
   useEffect(() => {
-    user && fetchLatestBandtits().then(setTimeline)
+    let unsuscribe
+    if (user) {
+      unsuscribe = listenLatestBandtits(setTimeline)
+    }
+    return () => unsuscribe && unsuscribe()
   }, [user])
 
   return (
