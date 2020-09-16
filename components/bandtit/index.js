@@ -2,6 +2,7 @@ import Avatar from "components/Avatar"
 import useTImeAgo from "hooks/useTimeAgo"
 import useDateTimeFormat from "hooks/useDateTimeFormat"
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 export default function BandTit({
   id,
@@ -13,10 +14,16 @@ export default function BandTit({
 }) {
   const timeAgo = useTImeAgo(createdAt)
   const createdAtFormated = useDateTimeFormat(createdAt)
+  const router = useRouter()
+
+  const handleArticleClick = (e) => {
+    e.preventDefault()
+    router.push("/status/[id]", `/status/${id}`)
+  }
 
   return (
     <>
-      <article key={id}>
+      <article key={id} onClick={handleArticleClick}>
         <div>
           <Avatar alt={userName} src={avatar} />
         </div>
@@ -39,6 +46,10 @@ export default function BandTit({
           border-bottom: 2px solid #eaf7ff;
           display: flex;
           padding: 10px 15px;
+        }
+        article:hover {
+          cursor: pointer;
+          background: #f5f8fa;
         }
         a {
           text-decoration: none;
