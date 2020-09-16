@@ -1,4 +1,3 @@
-import AppLayout from "components/AppLayout"
 import Button from "components/Button"
 import useUser from "hooks/useUser"
 import { useEffect, useState } from "react"
@@ -90,41 +89,39 @@ export default function ComposeBandtit() {
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Crear un BadTit / BandTer </title>
-        </Head>
-        <section className="form-container">
-          <section className="avatar-container">
-            <Avatar src={user && user.avatar} />
-          </section>
-          <form onSubmit={handleSubmit}>
-            <textarea
-              value={message}
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrag}
-              onChange={handleChange}
-              placeholder="¿Qué está pasando?"
-            ></textarea>
-            {imgURL && (
-              <section className="remove-img">
-                <button
-                  onClick={() => {
-                    setImgURL(null)
-                  }}
-                >
-                  X
-                </button>
-                <img src={imgURL} />
-              </section>
-            )}
-            <div>
-              <Button disabled={isButtonDIsabled}>BandTea</Button>
-            </div>
-          </form>
+      <Head>
+        <title>Crear un BadTit / BandTer </title>
+      </Head>
+      <section className="form-container">
+        <section className="avatar-container">
+          <Avatar src={user && user.avatar} />
         </section>
-      </AppLayout>
+        <form onSubmit={handleSubmit}>
+          <textarea
+            value={message}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrag}
+            onChange={handleChange}
+            placeholder="¿Qué está pasando?"
+          ></textarea>
+          {imgURL && (
+            <section className="remove-img">
+              <button
+                onClick={() => {
+                  setImgURL(null)
+                }}
+              >
+                X
+              </button>
+              <img src={imgURL} />
+            </section>
+          )}
+          <div>
+            <Button disabled={isButtonDIsabled}>BandTea</Button>
+          </div>
+        </form>
+      </section>
       <style jsx>{`
         div {
           padding: 15px;

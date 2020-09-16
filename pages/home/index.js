@@ -1,4 +1,3 @@
-import AppLayout from "components/AppLayout"
 import BandTit from "components/bandtit"
 import Create from "components/Icons/Create"
 import Search from "components/Icons/Search"
@@ -20,49 +19,47 @@ export default function HomePage() {
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Inicio / BandTer</title>
-        </Head>
-        <header>
-          <h2>Inicio</h2>
-        </header>
-        <section>
-          {timeline.map(
-            ({ id, userName, avatar, content, img, createdAt, userId }) => {
-              return (
-                <BandTit
-                  key={id}
-                  img={img}
-                  createdAt={createdAt}
-                  avatar={avatar}
-                  userName={userName}
-                  content={content}
-                  id={id}
-                  userId={userId}
-                />
-              )
-            }
-          )}
-        </section>
-        <nav>
-          <Link href="/home">
-            <a>
-              <Home width={32} height={32} stroke="#09f" />
-            </a>
-          </Link>
-          <Link href="/search">
-            <a>
-              <Search width={32} height={32} stroke="#09f" />
-            </a>
-          </Link>
-          <Link href="/compose/bandtit">
-            <a>
-              <Create width={32} height={32} stroke="#09f" />
-            </a>
-          </Link>
-        </nav>
-      </AppLayout>
+      <Head>
+        <title>Inicio / BandTer</title>
+      </Head>
+      <header>
+        <h2>Inicio</h2>
+      </header>
+      <section>
+        {timeline.map(
+          ({ id, userName, avatar, content, img, createdAt, userId }) => {
+            return (
+              <BandTit
+                key={id}
+                img={img}
+                createdAt={createdAt}
+                avatar={avatar}
+                userName={userName}
+                content={content}
+                id={id}
+                userId={userId}
+              />
+            )
+          }
+        )}
+      </section>
+      <nav>
+        <Link href="/home">
+          <a>
+            <Home width={32} height={32} stroke="#09f" />
+          </a>
+        </Link>
+        <Link href="/search">
+          <a>
+            <Search width={32} height={32} stroke="#09f" />
+          </a>
+        </Link>
+        <Link href="/compose/bandtit">
+          <a>
+            <Create width={32} height={32} stroke="#09f" />
+          </a>
+        </Link>
+      </nav>
       <style jsx>{`
         header {
           align-items: center;

@@ -1,5 +1,7 @@
 import Avatar from "components/Avatar"
 import useTImeAgo from "hooks/useTimeAgo"
+import useDateTimeFormat from "hooks/useDateTimeFormat"
+import Link from "next/link"
 
 export default function BandTit({
   id,
@@ -10,6 +12,7 @@ export default function BandTit({
   createdAt,
 }) {
   const timeAgo = useTImeAgo(createdAt)
+  const createdAtFormated = useDateTimeFormat(createdAt)
 
   return (
     <>
@@ -21,7 +24,11 @@ export default function BandTit({
           <header>
             <strong>{userName}</strong>
             <span> · </span>
-            <date>{timeAgo}</date>
+            <Link href={`/status/[id]`} as={`/status/${id}`}>
+              <a>
+                <time title={createdAtFormated}>{timeAgo}</time>
+              </a>
+            </Link>
           </header>
           <p>{content}</p>
           {img && <img src={img} />}
@@ -32,6 +39,12 @@ export default function BandTit({
           border-bottom: 2px solid #eaf7ff;
           display: flex;
           padding: 10px 15px;
+        }
+        a {
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: underline;
         }
         img {
           width: 100%;
@@ -49,7 +62,7 @@ export default function BandTit({
         span {
           margin: 0 5px;
         }
-        date {
+        time {
           color: #555;
           font-size: 14px;
         }

@@ -1,6 +1,5 @@
 import Head from "next/head"
 
-import AppLayout from "components/AppLayout"
 import BUtton from "components/BUtton"
 import GitHubLogo from "components/Icons/GitHub"
 
@@ -29,23 +28,20 @@ export default function Home() {
         <title>Bandter - Garage Band Expiernce</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <AppLayout>
-        <section>
-          <img src="/logo.png" />
-          <h1>BandTer</h1>
-          <h2>Garage Band Experiences 🎧</h2>
-          <div>
-            {user === USER_STATES.NOT_LOGGED && (
-              <BUtton onClick={handleClick}>
-                <GitHubLogo fill="#fff" width={24} height={24} />
-                Log In with GItHub
-              </BUtton>
-            )}
-            {user === USER_STATES.NOT_KNOWN && <img src="/spinner.gif" />}
-          </div>
-        </section>
-      </AppLayout>
+      <section>
+        <img src="/logo.png" />
+        <h1>BandTer</h1>
+        <h2>Garage Band Experiences 🎧</h2>
+        <div>
+          {user === USER_STATES.NOT_LOGGED && (
+            <BUtton onClick={handleClick}>
+              <GitHubLogo fill="#fff" width={24} height={24} />
+              Log In with GItHub
+            </BUtton>
+          )}
+          {user === USER_STATES.NOT_KNOWN && <img src="/spinner.gif" />}
+        </div>
+      </section>
 
       <style jsx>{`
         img {
